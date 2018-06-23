@@ -28,6 +28,14 @@ class ApplicationController < ActionController::API
     render json: obj, status: :ok
   end
 
+  def render_unprocessable(obj)
+    render json: obj, status: :unprocessable_entity
+  end
+
+  def render_unauthorized(obj)
+    render json: obj, status: :unauthorized
+  end
+
   def if_save_succeeds(obj, options={})
     if obj.save
       self.send(options[:call_after_save]) if options[:call_after_save]

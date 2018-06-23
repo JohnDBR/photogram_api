@@ -11,13 +11,35 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(user_params)
-    save_and_render @user
+    user = User.new(user_params)
+    if_save_succeeds(user) do |object|
+      if not params[:image].nil?
+        trans = Transmission.new
+        if trans.create_picture(params, user)
+          render_ok user
+        else
+          render_unprocessable({user: user, errors: trans.errors})
+        end
+      else
+        render_ok user
+      end
+    end
   end
 
   def update
     @user.update_attributes(user_params)
-    save_and_render @user
+    if_save_succeeds(@user) do |object|
+      if not params[:image].nil?
+        trans = Transmission.new
+        if trans.create_picture(params, @user)
+          render_ok @user
+        else
+          render_unprocessable({user: @user, errors: trans.errors})
+        end
+      else
+        render_ok @user
+      end
+    end
   end
 
   def destroy

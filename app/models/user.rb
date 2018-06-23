@@ -7,7 +7,8 @@ class User < ApplicationRecord
   before_save :format_downcase
 
   has_many :tokens, dependent: :destroy
-
+  belongs_to :picture, optional: true, dependent: :destroy
+  
   def self.search(search)
     where("email LIKE ? OR username LIKE ?", "%#{search}%", "%#{search}%").order("created_at DESC")
   end
