@@ -8,7 +8,7 @@ class Transmission
     @empty_params = false
   end
 
-  def create_picture(params, user)
+  def create_picture(params, resource)
     if params[:image].nil?
       @empty_params = true
       @errors[:upload_fail] = 'no photo to upload'
@@ -18,8 +18,8 @@ class Transmission
       upload_response = Cloudinary::Uploader.upload(params[:image], :public_id => file_name)
       @picture = Picture.new(name:file_name, url:upload_response["url"])
       if @picture.save 
-        if user.picture then user.picture.destroy end 
-        user.update_attribute(:picture_id, @picture.id)  
+        if resource.picture then resource.picture.destroy end 
+        resource.update_attribute(:picture_id, @picture.id)  
         return true 
       else 
         @errors[:upload_fail] = @picture.errors.messages 

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   before_save :format_downcase
 
   has_many :tokens, dependent: :destroy
+  has_many :posts, dependent: :destroy 
   belongs_to :picture, optional: true, dependent: :destroy
   
   def self.search(search)
